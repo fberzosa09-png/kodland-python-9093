@@ -1,0 +1,27 @@
+import random
+
+characters = "+-/*!&$#?=@abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+
+def generar_contraseña(longitud):
+    password = ""
+    for i in range(longitud):
+        password = password + random.choice(characters)
+    return password
+
+while True:
+    opcion = input("¿Quieres generar una contraseña? (sí/no): ").lower()
+
+    if opcion == "sí" or opcion == "si":
+        try:
+            longitud = int(input("Introduce la longitud de tu contraseña: "))
+            if longitud > 0:
+                print("Tu contraseña generada es: " + generar_contraseña(longitud))
+            else:
+                print("La longitud debe ser un número mayor que 0.")
+        except ValueError:
+            print("Por favor, introduce un número válido.")
+    elif opcion == "no":
+        print("¡Hasta luego!")
+        break
+    else:
+        print("Opción no válida. Escribe 'sí' o 'no'.")
