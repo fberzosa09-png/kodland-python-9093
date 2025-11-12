@@ -1,0 +1,78 @@
+import discord
+from discord.ext import commands
+import random
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+IDEAS_ECO = [
+    "Haz un portalápices usando una lata reciclada.",
+    "Convierte una camiseta vieja en una bolsa reutilizable.",
+    "Haz una maceta con una botella plástica cortada.",
+    "Crea una lámpara con un frasco de vidrio.",
+    "Haz un organizador con cajas de cereal forradas.",
+    "Decora tu cuarto con flores hechas de papel reciclado.",
+    "Usa rollos de papel higiénico para hacer organizadores pequeños.",
+    "Crea un porta celular con cartón resistente.",
+    "Haz un marco para fotos con palitos de helado.",
+    "Convierte un frasco vacío en una vela decorativa."
+]
+
+@bot.event
+async def on_ready():
+    print("EcoBot ha iniciado sesión como " + str(bot.user))
+
+@bot.command()
+async def eco(ctx):
+    mensaje = (
+        "EcoBot para ideas de cosas caseras y recicladas.\n"
+        "Comandos disponibles:\n"
+        "$idea  - muestra varias ideas al azar\n"
+        "$idea1 - muestra una sola idea\n"
+        "$material <nombre> - muestra ideas con ese material\n"
+    )
+    await ctx.send(mensaje)
+
+@bot.command()
+async def idea(ctx):
+    cantidad = 3
+    if cantidad > len(IDEAS_ECO):
+        cantidad = len(IDEAS_ECO)
+
+    seleccionadas = random.sample(IDEAS_ECO, cantidad)
+
+    mensaje = "Aquí tienes algunas ideas que puedes hacer en casa:\n"
+    for texto in seleccionadas:
+        mensaje = mensaje + "- " + texto + "\n"
+
+    await ctx.send(mensaje)
+
+@bot.command()
+async def idea1(ctx):
+    idea = random.choice(IDEAS_ECO)
+    await ctx.send("Idea ecológica: " + idea)
+
+@bot.command()
+async def material(ctx, *, nombre=None):
+    if nombre is None:
+        await ctx.send("Por favor escribe un material. Ejemplo: $material plástico")
+        return
+
+    nombre = nombre.lower()
+
+    if nombre == "plástico":
+        await ctx.send("Puedes hacer macetas, organizadores o lámparas usando botellas plásticas.")
+    elif nombre == "cartón":
+        await ctx.send("Puedes crear organizadores, marcos o tableros con cartón reciclado.")
+    elif nombre == "vidrio":
+        await ctx.send("Puedes hacer lámparas o frascos decorativos con vidrio.")
+    elif nombre == "tela":
+        await ctx.send("Puedes convertir ropa vieja en bolsas o cojines decorativos.")
+    elif nombre == "papel":
+        await ctx.send("Puedes hacer flores, sobres o decoraciones con papel reciclado.")
+    else:
+        await ctx.send("No tengo ideas registradas para ese material, pero puedes reutilizarlo de forma creativa.")
+bot.run("token")
+
